@@ -5,8 +5,10 @@ const projectRouter = require('./routers/projectRouter')
 const actionRouter = require('./routers/actionRouter')
 
 const server = express()
+const cors = require('cors')
 
 server.use(express.json())
+server.use(cors())
 server.use(helmet())
 server.use(logger)
 
