@@ -1,44 +1,39 @@
 const express = require('express')
-const db = require('../data/helpers/projectModel')
+const db = require('../data/helpers/actionModel')
 
 const router = express.Router()
 
-router.use((req, res, next) => {
-    console.log(`projectRouter`)
-    next()
-})
-
-//Get all projects
+///Get all actions
 
 router.get('/', (req, res) => {
     db.get()
-        .then(projects => {
-            res.status(200).json(projects)
+        .then(actions => {
+            res.status(200).json(actions)
         })
         .catch(err => {
-            res.status(500).json({ message: "Error getting projects" })
+            res.status(500).json({ message: " Error getting actions" })
         })
 })
 
-//Get projects for specifi id
+//Get actons for specific id
 
-router.get('/:id', (req, res) => {
+router.get("/:id", (req, res) => {
     const { id } = req.params
     db.get(id)
-        .then(projects => {
-            res.json(projects)
+        .then(action => {
+            res.json(action)
         })
         .catch(err => {
-            res.status(500).json({ message: "Error getting projects" })
+            res.json(500).json({ message: "Error getting actions" })
         })
 })
 
-//Post a new project
+//Post
 
 router.post('/', (req, res) => {
     db.insert(req.body)
-        .then(project => {
-            res.status(201).json(project)
+        .then(action => {
+            res.status(201).json(action)
         })
         .catch(err => {
             res.status(500).json({ message: "Error posting" })
@@ -50,11 +45,11 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     const { name, description } = req.body
     if (!name || !description) {
-        res.status(400).json({ error: "Name and Description required!" })
+        res.status(404).json({ error: "Name and description required" })
     }
     db.update(req.params.id, req.body)
-        .then(project => {
-            project ? res.status(200).json(project) : res.status(404).json({ error: "cannot find that post" })
+        .then(action => {
+            action ? res.status(200).json(action) : res.status(404).json({ error: "Cannot find that post" })
         })
         .catch(() => {
             res.status(500).json({ errorMessage: "Failed to edit" })
@@ -63,7 +58,7 @@ router.put('/:id', (req, res) => {
 
 //Delete
 
-router.delete('/:id', (req, res) => {
+router.delete("/:id", (req, res) => {
     const { id } = req.params
     db.remove(id)
         .then(project => {
@@ -73,6 +68,5 @@ router.delete('/:id', (req, res) => {
             res.status(500).json()
         })
 })
-
 
 module.exports = router
